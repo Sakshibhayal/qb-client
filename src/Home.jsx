@@ -32,6 +32,22 @@ function Home() {
     });
   };
 
+  const checkConnection = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/auth-status");
+      setIsConnected(response.data.connected);
+    } catch (err) {
+      console.error("Error checking QuickBooks status:", err);
+    }
+  };
+
+  const connectQuickBooks = async () => {
+    const res = await fetch("http://localhost:3000/auth-url");
+    const data = await res.json();
+
+    window.location.href = data.url;
+  };
+
   const createCustomer = async(e) => {
     e.preventDefault();
     console.log("form data :", formData)
@@ -52,9 +68,12 @@ function Home() {
 
    const closeModal = () => {
     setShowSuccess(false);
-    navigate("/orders")
+    navigate("/create-order")
   };
 
+  useEffect(() => {
+    checkConnection();
+  }, []);
 
   const createInvoice = async () => {
     const res = await fetch("http://localhost:3000/create-invoice", {
@@ -88,31 +107,11 @@ function Home() {
     setEmailStatus(data.message || "Email sent!");
   };
 
-  const connectQuickBooks = async () => {
-    const res = await fetch("http://localhost:3000/auth-url");
-    const data = await res.json();
-
-    window.location.href = data.url;
-  };
-
   const fetchInvoices = async () => {
     const res = await fetch("http://localhost:3000/invoices");
     const data = await res.json();
     setInvoices(data);
   };
-
-  const checkConnection = async () => {
-    try {
-      const response = await axios.get("http://localhost:3000/auth-status");
-      setIsConnected(response.data.connected);
-    } catch (err) {
-      console.error("Error checking QuickBooks status:", err);
-    }
-  };
-
-  useEffect(() => {
-    checkConnection();
-  }, []);
 
   const resendInvoice = async (invoiceId, email) => {
     const res = await fetch("http://localhost:3000/resend-invoice", {

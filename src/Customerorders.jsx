@@ -180,26 +180,38 @@ function CustomerAndOrders() {
       <div className="d-flex mb-4 gap-3">
         <select
           className="form-select"
-          disabled={!isConnected || showCustomerForm }
-          value={selectedCustomer ? JSON.stringify(selectedCustomer) : ""}
-          onChange={(e) => setSelectedCustomer(JSON.parse(e.target.value))}
+          disabled={!isConnected || showCustomerForm}
+          value={selectedCustomer?.Id || ""}
+          onChange={(e) => {
+            const selectedId = e.target.value;
+            const cust = customers.find(c => c.Id === selectedId);
+            setSelectedCustomer(cust || null);
+          }}
         >
           <option value="">Select Customer</option>
-          {customers.map((customer) => (
-            <option key={customer.Id} value={JSON.stringify(customer)}>
+          {customers.map(customer => (
+            <option key={customer.Id} value={customer.Id}>
               {customer.DisplayName}
             </option>
           ))}
         </select>
 
+        {!showCustomerForm ? <button
+          className="btn btn-success"
+          disabled={!isConnected}
+          style={{ whiteSpace: "nowrap" }}
+          onClick={() => {setShowCustomerForm(!showCustomerForm); setSelectedCustomer(null);}}
+        >
+          + Add Customer
+        </button> :
         <button
           className="btn btn-success"
           disabled={!isConnected}
           style={{ whiteSpace: "nowrap" }}
-          onClick={() => setShowCustomerForm(!showCustomerForm)}
+          onClick={() => {setShowCustomerForm(!showCustomerForm); setSelectedCustomer(null);}}
         >
-          + Add Customer
-        </button>
+          Select Customer
+        </button>}
       </div>
 
       {/* CUSTOMER CREATION FORM */}

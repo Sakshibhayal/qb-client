@@ -73,7 +73,7 @@ function CustomerAndOrders() {
       const response = await axios.post("http://localhost:3000/qb/customer", formData);
       const data = response.data;
 
-      if (data.customer.Active === true) {
+      if (response.status === 201) {
         setShowSuccess(true);
       }
 

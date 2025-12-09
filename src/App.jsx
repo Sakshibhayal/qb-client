@@ -4,6 +4,7 @@ import Orders from "./Orders";
 import Home from "./Home";
 import OrderList from "./OrderList";
 import InvoiceList from "./InvoiceList";
+import CustomerAndOrders from "./Customerorders";
 function App() {
 
   const [customerId, setCustomerId] = useState("");
@@ -310,7 +311,7 @@ function App() {
         <div className="row justify-content-center">
           <div className="col-12 col-lg-10">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<CustomerAndOrders />} />
               <Route path="/create-order" element={<Orders />} />
               <Route path="/order-list" element={<OrderList />} />
               <Route path="/invoices" element={<InvoiceList/>} />

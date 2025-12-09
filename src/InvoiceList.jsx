@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { SquareUser } from 'lucide-react';
+import { SiTicktick } from "react-icons/si";
 import React, { use, useEffect, useState } from 'react'
 
 const InvoiceList = () => {
@@ -7,16 +8,37 @@ const InvoiceList = () => {
     const fetchInvoices = async () => {
     const response = await axios.get("http://localhost:3000/invoices");
     const data = response.data;
-    setInvoices(data || []);
+    setInvoices(data.map(inv => ({
+    ...inv,
+    paid: inv.PrivateNote === "Paid manually via external method"
+  })));
     console.log(data);
   }
-const resendInvoice = async (invoiceId,email) => {
+  const resendInvoice = async (invoiceId, email) => {
     try {
-      const response = await axios.post(`http://localhost:3000/resend-invoice`, { invoiceId:invoiceId, email:email} );
+      const response = await axios.post(`http://localhost:3000/resend-invoice`, { invoiceId: invoiceId, email: email });
       const data = response.data;
       console.log("Invoice resent successfully:", data);
     } catch (error) {
       console.error('Error resending invoice:', error);
+    }
+  }
+
+  const payment = async (invoiceId) => {
+    try {
+      const response = await axios.post(`http://localhost:3000/mark-paid`, { invoiceId: invoiceId });
+      const data = response.data;
+      console.log("Invoice marked as paid successfully:", data);
+      if (response.status === 201){
+         setInvoices(prev =>
+        prev.map(inv =>
+          inv.Id === invoiceId ? { ...inv, paid: true } : inv
+        )
+      );
+      }
+    }
+    catch (error) {
+      console.error('Error marking invoice as paid:', error);
     }
   }
   useEffect(() => {
@@ -35,16 +57,16 @@ const resendInvoice = async (invoiceId,email) => {
 
           <div className="d-flex flex-column lh-sm">
             <span className="fw-semibold fs-5 text-capitalize">{invoice.CustomerRef.name}</span>
-            <span className="text-secondary small">{invoice.BillEmail.Address}</span>
-            <span className="text-secondary small">{invoice.Id}</span>
-            <span className="text-secondary small">{invoice.TotalAmt}</span>
+            <span className="text-secondary small">email : {invoice.BillEmail.Address}</span>
+            <span className="text-secondary small">invoice number : {invoice.Id}</span>
+            <span className="text-secondary small">amount : {invoice.TotalAmt}</span>
           </div>
         </div>
 
-        <div className="col-4 d-flex align-items-center justify-content-end">
+        <div className="col-4 d-flex align-items-center justify-content-end gap-3">
           <button
             onClick={() => resendInvoice(Number(invoice.Id),invoice.BillEmail.Address)}
-            className="btn text-black px-4"
+            className="btn text-black px-3"
             style={{
               background: '#d4af37',
               borderRadius: '8px',
@@ -54,6 +76,25 @@ const resendInvoice = async (invoiceId,email) => {
           >
             Resend Invoice
           </button>
+
+            <div style={{ width: "150px", display: "flex", justifyContent: "center" }}>
+              {!invoice.paid ? (
+                <button
+                  onClick={() => payment(Number(invoice.Id))}
+                  className="btn btn-success text-white px-3"
+                  style={{
+                    borderRadius: '8px',
+                    padding: '10px 20px',
+                    fontWeight: '500',
+                    width: "100%"
+                  }}
+                >
+                  Make Payment
+                </button>
+              ) : (
+                <SiTicktick size={45} style={{ color: 'limegreen' }} />
+              )}
+            </div>
         </div>
       </div>))}
     </div>

@@ -34,7 +34,9 @@ const navigate = useNavigate();
       boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
     }}>
       <h2 className="text-center mb-4" style={{ color: '' }}>Order List</h2>
-      {orders.map((order) => (
+      {orders.map((order) => {
+        let order_date = order.created_at.split(" ")[0];
+
       <div className="text-white rounded-2 d-flex px-4 mt-3" style={{ height: "110px", border: "1px solid #333", backgroundColor: '#001f14'}}>
 
         <div className="col-8 d-flex align-items-center gap-3">
@@ -42,9 +44,11 @@ const navigate = useNavigate();
 
           <div className="d-flex flex-column lh-sm">
             <span className="fw-semibold fs-5 text-capitalize">{order.customer_name}</span>
-            <span className="text-secondary small">{order.customer_email}</span>
-            <span className="text-secondary small">{order.item_id}</span>
-            <span className="text-secondary small">{order.amount}</span>
+            <span className="text-secondary small">order id :{order.id}</span>
+            <span className="text-secondary small">order date : {order_date}</span>
+            <span className="text-secondary small">email : {order.customer_email}</span>
+            <span className="text-secondary small">invoice id : {order.quickbooks_invoice_id}</span>
+            <span className="text-secondary small">amount : {order.amount}</span>
           </div>
         </div>
 
@@ -63,9 +67,10 @@ const navigate = useNavigate();
             Create Invoice
           </button>
         </div>
-      </div>))}
+      </div>})}
       <button onClick={()=>navigate('/invoices')} className="btn btn-success mt-4">View All Invoices</button>
 
+      <button className='btn w-100 text-white mt-4'style={{ background: 'black'}}> View All Invoices</button>
     </div>
   )
 }

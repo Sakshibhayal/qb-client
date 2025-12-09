@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { SquareUser } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+
 
 const OrderList = () => {
-
+const navigate = useNavigate();
   const [orders, setOrders] = useState([])
   const fetchOrders = async () => {
     const response = await axios.get("http://localhost:3000/orders");
@@ -14,7 +16,8 @@ const OrderList = () => {
 
   const createInvoice = async(orderId) => {
     try {
-      const response = await axios.post(`http://localhost:3000/create-invoices`, orderId );
+      const response = await axios.post(`http://localhost:3000/create-invoices`, {orderId:orderId} );
+      window.location.reload();
       const data = response.data;
       console.log("Invoice created successfully:", data);
     } catch (error) {
@@ -32,7 +35,7 @@ const OrderList = () => {
     }}>
       <h2 className="text-center mb-4" style={{ color: '' }}>Order List</h2>
       {orders.map((order) => (
-      <div className="text-white rounded-2 d-flex px-4" style={{ height: "110px", border: "1px solid #333", backgroundColor: '#001f14'}}>
+      <div className="text-white rounded-2 d-flex px-4 mt-3" style={{ height: "110px", border: "1px solid #333", backgroundColor: '#001f14'}}>
 
         <div className="col-8 d-flex align-items-center gap-3">
           <SquareUser size={60} style={{ color: '#9ca3af' }} />
@@ -61,6 +64,7 @@ const OrderList = () => {
           </button>
         </div>
       </div>))}
+      <button onClick={()=>navigate('/invoices')} className="btn btn-success mt-4">View All Invoices</button>
 
     </div>
   )

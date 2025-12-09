@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Orders from "./Orders";
 import Home from "./Home";
 import OrderList from "./OrderList";
+import InvoiceList from "./InvoiceList";
 function App() {
 
   const [customerId, setCustomerId] = useState("");
@@ -312,6 +313,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/create-order" element={<Orders />} />
               <Route path="/order-list" element={<OrderList />} />
+              <Route path="/invoices" element={<InvoiceList/>} />
               {/* <Route path="*" element={<NotFound />} /> */}
             </Routes>
           </div>

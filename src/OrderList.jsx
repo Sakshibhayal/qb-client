@@ -35,8 +35,8 @@ const navigate = useNavigate();
     }}>
       <h2 className="text-center mb-4" style={{ color: '' }}>Order List</h2>
       {orders.map((order) => {
-        let order_date = order.created_at.split(" ")[0];
-
+        const order_date = new Date(order.created_at).toISOString().split("T")[0];
+        return (
       <div className="text-white rounded-2 d-flex px-4 mt-3" style={{ height: "110px", border: "1px solid #333", backgroundColor: '#001f14'}}>
 
         <div className="col-8 d-flex align-items-center gap-3">
@@ -67,10 +67,8 @@ const navigate = useNavigate();
             Create Invoice
           </button>
         </div>
-      </div>})}
+      </div>);})}
       <button onClick={()=>navigate('/invoices')} className="btn btn-success mt-4">View All Invoices</button>
-
-      <button className='btn w-100 text-white mt-4'style={{ background: 'black'}}> View All Invoices</button>
     </div>
   )
 }

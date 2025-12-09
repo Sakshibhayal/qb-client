@@ -25,22 +25,26 @@ const InvoiceList = () => {
   }
 
   const payment = async (invoiceId) => {
-    try {
-      const response = await axios.post(`http://localhost:3000/mark-paid`, { invoiceId: invoiceId });
-      const data = response.data;
-      console.log("Invoice marked as paid successfully:", data);
-      if (response.status === 201){
-         setInvoices(prev =>
+  try {
+    const response = await axios.post("http://localhost:3000/mark-paid", {
+      invoiceId
+    });
+
+    if (response.status === 201) {
+      setInvoices(prev =>
         prev.map(inv =>
-          inv.Id === invoiceId ? { ...inv, paid: true } : inv
+          String(inv.Id) === String(invoiceId)
+            ? { ...inv, paid: true, PrivateNote: "Paid manually via external method" }
+            : inv
         )
       );
-      }
     }
-    catch (error) {
-      console.error('Error marking invoice as paid:', error);
-    }
+
+  } catch (error) {
+    console.error("Error marking invoice as paid:", error);
   }
+};
+
   useEffect(() => {
         fetchInvoices();
     }, []);
@@ -80,7 +84,7 @@ const InvoiceList = () => {
             <div style={{ width: "150px", display: "flex", justifyContent: "center" }}>
               {!invoice.paid ? (
                 <button
-                  onClick={() => payment(Number(invoice.Id))}
+                  onClick={() => payment(String(invoice.Id))}
                   className="btn btn-success text-white px-3"
                   style={{
                     borderRadius: '8px',

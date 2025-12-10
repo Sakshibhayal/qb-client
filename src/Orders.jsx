@@ -139,11 +139,9 @@ function Orders() {
       <div className="d-flex gap-3">
         <button className="btn w-100 text-white mt-4" onClick={() => createOrder()} style={{ background: 'black', }}>Create Order</button>
 
-        <button className="btn w-100 text-white mt-4" onClick={() => createOrder(true)} style={{ background: 'black' }}>Create Order with Invoice</button>
+            <button className="btn w-100 text-white mt-4" onClick={() => createOrder(true)} style={{ background: 'black'}}>Create Order with Invoice</button>
+            </div>
       </div>
-      {/* <h2 className="text-center mb-4" style={{ color: '#004d00' }}>Orders Page</h2>
-          <p className="text-center">This is where order details will be displayed.</p> */}
-    </div>
   )
 }
 

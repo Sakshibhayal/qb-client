@@ -8,14 +8,22 @@ const InvoiceList = () => {
     const [invoices, setInvoices] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const fetchInvoices = async () => {
-    const response = await axios.get("http://localhost:3000/invoices");
-    const data = response.data;
-    setInvoices(data.map(inv => ({
-    ...inv,
-    paid: inv.PrivateNote === "Paid manually via external method"
-  })));
-    console.log(data);
+  const fetchInvoices = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get("http://localhost:3000/invoices");
+      const data = response.data;
+      setInvoices(data.map(inv => ({
+        ...inv,
+        paid: inv.PrivateNote === "Paid manually via external method"
+      })));
+    } catch (error) {
+      const errorDetail = error?.response.data.error || error.response.data.error?.fault?.error[0]?.message || "Unknown error occurred";
+      setErrorMessage(errorDetail);
+      console.error('Error fetching invoices:', error);
+    } finally {
+      setIsLoading(false);
+    }
   }
   const resendInvoice = async (invoiceId, email) => {
     setIsLoading(true);

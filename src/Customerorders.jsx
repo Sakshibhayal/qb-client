@@ -60,12 +60,15 @@ function CustomerAndOrders() {
   };
 
   const fetchCustomers = async () => {
+    setIsLoading(true);
     try {
-      const response = await axios.get("http://localhost:3000/qb/customers");
+      const response = await axios.get("http://localhost:3000/customers");
       const data = response.data;
       setCustomers(data.customers || []);
     } catch (error) {
       console.error('Error fetching customers:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,7 +77,7 @@ function CustomerAndOrders() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post("http://localhost:3000/qb/customer", formData);
+      const response = await axios.post("http://localhost:3000/customer", formData);
       const data = response.data;
 
       if (response.status === 201) {
@@ -99,7 +102,7 @@ function CustomerAndOrders() {
   const createOrder = async (withInvoice) => {
     const finalCustomer = selectedCustomer || customerData?.customer;
     const requestBody = {
-      qbCustomerId: selectedCustomer ? selectedCustomer.Id : null,
+      providerCustomerId: selectedCustomer ? selectedCustomer.Id : null,
       customerName: selectedCustomer ? selectedCustomer.DisplayName : null,
       customerEmail: selectedCustomer ? selectedCustomer.PrimaryEmailAddr?.Address : null,
       itemId: orderData.itemId,
@@ -209,10 +212,7 @@ function CustomerAndOrders() {
         style={{ background: 'black', borderRadius: '15px', padding: '15px' }}
       >
         Connect QuickBooks
-      </button> :
-        <div className="btn w-100 text-white mb-4" style={{ background: 'green', borderRadius: '10px', padding: '15px' }}>
-          Connected to QuickBooks!
-          </div>
+      </button> : <div></div>
           }
 
       <div className="d-flex mb-4 gap-3">

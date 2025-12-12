@@ -20,7 +20,7 @@ function Orders() {
   };
   const fetchCustomers = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/qb/customers");
+      const response = await axios.get("http://localhost:3000/customers");
       const data = response.data;
       setCustomers(data.customers || []);
     } catch (error) {

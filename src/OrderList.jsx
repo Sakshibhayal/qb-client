@@ -71,6 +71,7 @@ const navigate = useNavigate();
           </div>
         </div>
       )}
+      <button onClick={()=>navigate('/invoices')} className="btn btn-success" style={{position:"absolute", right:"250px"}}>View All Invoices</button>
       <h2 className="text-center mb-4" style={{ color: '' }}>Order List</h2>
       {orders.map((order) => {
         const order_date = new Date(order.created_at).toISOString().split("T")[0];
@@ -125,7 +126,7 @@ const navigate = useNavigate();
           </button>
         </div>
       </div>);})}
-      <button onClick={()=>navigate('/invoices')} className="btn btn-success mt-4">View All Invoices</button>
+      {/* <button onClick={()=>navigate('/invoices')} className="btn btn-success mt-4">View All Invoices</button> */}
     </div>
   )
 }

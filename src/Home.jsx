@@ -52,7 +52,7 @@ function Home() {
     e.preventDefault();
     console.log("form data :", formData)
     try {
-    const response = await axios.post("http://localhost:3000/qb/customer", formData )
+    const response = await axios.post("http://localhost:3000/customer", formData )
     const data = response.data;
     console.log("response data :", response , "data ",data)
     if (data.customer.Active === true) {

@@ -134,8 +134,11 @@ function CustomerAndOrders() {
   };
 
   useEffect(() => {
-    checkConnection();
-    fetchCustomers();
+    const init = async () => {
+      await checkConnection();
+      await fetchCustomers();
+    }
+    init();
   }, []);
 
   return (
